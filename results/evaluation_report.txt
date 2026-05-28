@@ -1,13 +1,13 @@
 EVALUASI BASELINE PREDIKSI MEMBRAN
 ===================================
-Jumlah protein berlabel: 6
+Jumlah protein berlabel: 60
 Confusion matrix:
-- TP membrane benar: 3
-- TN non-membrane benar: 3
-- FP non-membrane diprediksi membrane: 0
-- FN membrane tidak terdeteksi: 0
+- TP membrane benar: 12
+- TN non-membrane benar: 28
+- FP non-membrane diprediksi membrane: 2
+- FN membrane tidak terdeteksi: 18
 
-Accuracy : 1.0
-Precision: 1.0
-Recall   : 1.0
-F1-score : 1.0
+Accuracy : 0.667
+Precision: 0.857
+Recall   : 0.4
+F1-score : 0.545
