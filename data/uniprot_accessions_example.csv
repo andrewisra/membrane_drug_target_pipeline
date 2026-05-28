@@ -1,7 +1,0 @@
-accession,label,organism,function,notes
-P02930,membrane,Escherichia coli K-12,TolC outer membrane channel,well known outer membrane efflux channel component
-P0A910,membrane,Escherichia coli K-12,OmpA outer membrane protein,outer membrane protein
-P02931,membrane,Escherichia coli K-12,OmpF porin,outer membrane porin
-P0A7V8,non_membrane,Escherichia coli K-12,RpsD ribosomal protein S4,cytosolic ribosomal protein
-P0A6F5,non_membrane,Escherichia coli K-12,GroEL chaperonin,cytosolic chaperone
-P0A9P0,non_membrane,Escherichia coli K-12,DnaK chaperone,cytosolic chaperone
