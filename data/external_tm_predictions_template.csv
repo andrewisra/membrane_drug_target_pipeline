@@ -1,0 +1,3 @@
+protein_id,region_type,start,end,source
+sp|P0A910|OMPA_ECOLI,tm,22,44,DeepTMHMM
+sp|P0A910|OMPA_ECOLI,tm,60,82,DeepTMHMM

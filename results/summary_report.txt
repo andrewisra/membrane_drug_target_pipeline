@@ -1,0 +1,24 @@
+RINGKASAN HASIL ANALISIS
+=======================
+Total protein dianalisis: 6
+Protein dengan >=1 segmen transmembran: 3
+Protein tanpa segmen transmembran: 3
+Kandidat prioritas tinggi: 1
+Kandidat prioritas sedang: 2
+Kandidat prioritas rendah: 3
+
+Evaluasi baseline terhadap label dataset:
+- Accuracy : 1.0
+- Precision: 1.0
+- Recall   : 1.0
+- F1-score : 1.0
+
+Kandidat prioritas tertinggi:
+- ID protein: MembraneCandidate_1
+- Skor kandidat: 90 / 100
+- Jumlah segmen transmembran: 5
+- Posisi segmen TM: 22-50;64-85;92-113;120-141;156-182
+- GRAVY: 0.928
+- Instability index: 14.96
+- Aksesibilitas prediksi: medium
+- Interpretasi: Kandidat kuat untuk dianalisis lanjut. Alasan: memiliki 5 segmen transmembran, GRAVY positif/hidrofobik, memiliki indikasi signal peptide.

@@ -1,0 +1,7 @@
+protein_id,known_label,function_note,pathogen_relevance
+MembraneCandidate_1,membrane,Predicted multipass transporter,Transporters are common drug target classes
+MembraneCandidate_2,membrane,Predicted single-pass surface receptor,Surface exposure may improve accessibility
+SolubleProtein_1,non_membrane,Cytosolic enzyme-like protein,Lower accessibility as extracellular drug target
+SolubleProtein_2,non_membrane,Ribosomal-like acidic protein,Essential but not membrane exposed
+MembraneCandidate_3,membrane,Outer membrane-like protein,Surface/outer membrane proteins can be target candidates
+SolubleProtein_3,non_membrane,Secreted/periplasmic-like soluble protein,May be secreted but lacks TM anchor

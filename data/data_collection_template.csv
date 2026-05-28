@@ -1,0 +1,3 @@
+accession,label,organism,protein_name,function_hint,subcellular_location,is_essential,human_homolog,source_url,notes
+P0A910,membrane,Escherichia coli K-12,Outer membrane protein A,outer membrane porin/structural protein,outer membrane,yes,no,https://www.uniprot.org/uniprotkb/P0A910/entry,contoh protein membran
+P0A6F5,non_membrane,Escherichia coli K-12,60 kDa chaperonin,cytosolic chaperone,cytoplasm,yes,yes,https://www.uniprot.org/uniprotkb/P0A6F5/entry,contoh protein non-membran kontrol
