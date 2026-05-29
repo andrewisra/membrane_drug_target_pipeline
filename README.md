@@ -1,62 +1,44 @@
 # Identifikasi Kandidat Target Obat Berbasis Protein Membran melalui Analisis Sekuens dan Prediksi Topologi Transmembran
 
-Pipeline bioinformatika berbasis Python untuk menganalisis sekuens protein, memprediksi segmen transmembran secara baseline, mengekstraksi fitur fisikokimia, mengevaluasi hasil terhadap label dataset, dan memprioritaskan protein membran sebagai kandidat target obat awal.
+Pipeline bioinformatika berbasis Python untuk menganalisis sekuens protein, memprediksi segmen transmembran secara baseline, mengekstraksi fitur fisikokimia, serta memprioritaskan protein membran sebagai kandidat target obat awal.
 
-## Mengapa proyek ini bermakna
+---
 
-Protein membran sering menjadi target biologis penting karena terlibat dalam transport molekul, sinyal seluler, adhesi, dan interaksi sel dengan lingkungan. Pada bakteri patogen, protein membran/permukaan lebih mudah diakses oleh molekul obat atau antibodi dibanding protein sitoplasmik. Pipeline ini bukan alat penemuan obat final, tetapi alat penyaringan awal untuk memilih protein yang layak dianalisis lebih lanjut.
+## Latar Belakang
 
-## Input yang didukung
+Protein membran memiliki peran penting dalam transport molekul, komunikasi sel, dan interaksi dengan lingkungan. Karena sifatnya yang mudah diakses dari luar sel, protein membran sering digunakan sebagai target dalam pengembangan obat dan vaksin.
 
-### 1. FASTA protein
+Proyek ini bertujuan untuk membangun pipeline bioinformatika sederhana yang dapat membantu proses penyaringan awal kandidat target obat berbasis analisis sekuens protein dan prediksi topologi transmembran.
 
-Wajib. Contoh:
+---
 
-```text
+## Dataset
+
+Dataset menggunakan protein *Escherichia coli* K-12 dari UniProtKB dengan status *reviewed*. Dataset terdiri atas:
+- 30 protein membrane
+- 30 protein non membrane
+
+File dataset:
+
+```bash
+data/data_collection.csv
 data/proteins.fasta
 ```
 
-### 2. Metadata CSV dari tim pengumpul data
+---
 
-Opsional tetapi sangat disarankan untuk hasil final. Template tersedia di:
+## Metode
 
-```text
-data/data_collection_template.csv
-```
+Pipeline melakukan beberapa tahapan utama:
+1. Membaca sekuens protein dari file FASTA.
+2. Membersihkan sekuens menjadi 20 asam amino standar.
+3. Menghitung fitur fisikokimia protein.
+4. Memprediksi segmen transmembran menggunakan metode Kyte-Doolittle sliding window.
+5. Menghasilkan skor prioritas kandidat protein membran.
+6. Mengevaluasi hasil prediksi menggunakan confusion matrix.
+7. Membuat visualisasi hasil analisis.
 
-Kolom yang disarankan:
-
-```text
-accession,label,organism,protein_name,function_hint,subcellular_location,is_essential,human_homolog,source_url,notes
-```
-
-Lihat instruksi lengkap di:
-
-```text
-docs/instruksi_pengumpulan_data.md
-```
-
-### 3. Hasil DeepTMHMM/TMHMM yang dinormalisasi
-
-Opsional. Template tersedia di:
-
-```text
-data/external_tm_predictions_template.csv
-```
-
-Format:
-
-```text
-protein_id,region_type,start,end,source
-```
-
-## Output utama
-
-- `results/protein_features.csv`: fitur tiap protein.
-- `results/candidate_ranking.csv`: ranking kandidat target obat.
-- `results/evaluation_report.txt`: evaluasi baseline jika dataset memiliki label.
-- `results/summary_report.txt`: ringkasan hasil biologis.
-- `figures/*.png`: grafik ranking, distribusi prioritas, scatter plot, peta segmen transmembran, dan confusion matrix.
+---
 
 ## Instalasi
 
@@ -64,86 +46,70 @@ protein_id,region_type,start,end,source
 pip install -r requirements.txt
 ```
 
-## Jalankan demo offline
+---
+
+## Menjalankan Pipeline
 
 ```bash
-python src/main.py --fasta data/proteins.fasta --output-dir results --figure-dir figures
+python src/main.py --fasta data/proteins.fasta --metadata-csv data/data_collection.csv --output-dir results --figure-dir figures
 ```
 
-## Jalankan dengan data teman/tim
+---
 
-1. Minta teman mengisi:
+## Output
+
+Pipeline menghasilkan beberapa file output berikut:
 
 ```text
-data/friend_metadata.csv
+results/protein_features.csv
+results/candidate_ranking.csv 
+results/evaluation_report.txt 
+results/summary_report.txt
 ```
 
-berdasarkan template `data/data_collection_template.csv`.
-
-2. Ambil FASTA otomatis dari UniProt berdasarkan accession CSV:
-
-```bash
-python src/fetch_uniprot.py fetch-accessions --input-csv data/friend_metadata.csv --output-fasta data/friend_proteins.fasta
+Visualisasi hasil disimpan pada folder:
+```text
+figures/
 ```
 
-3. Jalankan pipeline final:
+---
 
-```bash
-python src/main.py --fasta data/friend_proteins.fasta --metadata-csv data/friend_metadata.csv --output-dir results_friend --figure-dir figures_friend
-```
-
-4. Jika ada hasil DeepTMHMM/TMHMM:
-
-```bash
-python src/main.py --fasta data/friend_proteins.fasta --metadata-csv data/friend_metadata.csv --external-tm-csv data/external_tm_predictions.csv --output-dir results_friend --figure-dir figures_friend
-```
-
-## Cari kandidat protein dari UniProt
-
-Contoh pencarian protein membran *E. coli* K-12 reviewed:
-
-```bash
-python src/fetch_uniprot.py search --query "(organism_id:83333) AND (cc_subcellular_location:membrane) AND reviewed:true" --output-tsv data/ecoli_membrane.tsv --size 30
-```
-
-Contoh pencarian protein sitoplasmik/non-membran *E. coli* K-12 reviewed:
-
-```bash
-python src/fetch_uniprot.py search --query "(organism_id:83333) AND (cc_subcellular_location:cytoplasm) AND reviewed:true" --output-tsv data/ecoli_non_membrane.tsv --size 30
-```
-
-## Metode ringkas
-
-1. Input sekuens protein FASTA.
-2. Bersihkan sekuens menjadi 20 asam amino standar.
-3. Hitung fitur fisikokimia dengan Biopython ProtParam.
-4. Prediksi segmen transmembran menggunakan sliding window Kyte-Doolittle hydropathy.
-5. Prediksi kasar signal peptide N-terminal.
-6. Gabungkan metadata biologis dari CSV jika tersedia.
-7. Hitung skor kandidat berdasarkan bukti membran, hidrofobisitas, aksesibilitas, sinyal sekresi, fungsi, esensialitas, risiko homolog manusia, dan penalti stabilitas/panjang.
-8. Evaluasi terhadap label dataset jika tersedia.
-9. Hasilkan ranking, visualisasi, dan interpretasi biologis.
-
-## Batasan ilmiah
-
-- Prediksi transmembran lokal adalah baseline explainable, bukan pengganti DeepTMHMM/TMHMM.
-- Signal peptide hanya diprediksi dengan heuristik sederhana; validasi ideal memakai SignalP.
-- Skor kandidat adalah prioritisasi komputasional awal, bukan bukti bahwa protein pasti target obat.
-- Untuk studi lanjutan, kandidat perlu divalidasi dengan DeepTMHMM, SignalP, InterProScan, BLASTp terhadap protein manusia, data esensialitas gen, dan literatur biologis.
-
-## Struktur folder
+## Struktur Folder
 
 ```text
-data/       input FASTA, accession CSV, template data
-src/        kode pipeline
-tests/      unit test sederhana
-results/    output CSV dan ringkasan
-figures/    output visualisasi
-docs/       instruksi data, proposal, laporan final, flowchart, outline video
+data/           # dataset FASTA dan metadata 
+src/            # source code pipeline 
+tests/          # unit testing 
+results/        # hasil analisis 
+figures/        # visualisasi hasil 
+docs/           # laporan dan dokumentasi
 ```
 
-## Jalankan test
+---
 
-```bash
-pytest -q
-```
+## Batasan
+
+- Prediksi topologi transmembran masih menggunakan pendekatan baseline berbasis hidrofobisitas.
+- Pipeline belum menggunakan model prediksi lanjutan seperti DeepTMHMM atau SignalP.
+- Hasil yang diperoleh merupakan prioritas kandidat awal dan masih memerlukan validasi biologis lebih lanjut.
+
+---
+
+## Teknologi yang Digunakan
+
+- Python
+- Biopython
+- Pandas
+- NumPy
+- Matplotlib
+
+---
+
+## Kontributor
+
+| Nama | NIM | 
+|---|---| 
+| Anella Utari Gunadi | 13523078 | 
+| Nayla Zahira | 13523079 | 
+| Muhammad Izzat Jundy | 13523092 | 
+| Andrew Isra Saputra DB | 13523110 |
